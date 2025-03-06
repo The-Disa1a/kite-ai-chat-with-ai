@@ -27,9 +27,16 @@ headers = {
 
 # List of messages (request texts) that the user wants to process
 messages = [
-    "tell me more about AI automation",
-    "what is decentralized AI?",
-    "how can AI benefit in business?",
+    "Tell me about Kite AI's core features.",
+    "How does Kite AI use blockchain technology?",
+    "What is Proof of Attributed Intelligence (PoAI) in Kite AI?",
+    "Can you explain the trustless marketplace in Kite AI?",
+    "How does Kite AI support decentralized AI?",
+    "What are the benefits of using Kite AI for developers?",
+    "How scalable is Kite AI’s subnet architecture?",
+    "What kind of collaboration opportunities does Kite AI offer?",
+    "How can businesses integrate Kite AI into their operations?",
+    "What makes Kite AI different from other AI platforms?",
     # Add more messages as needed
 ]
 
