@@ -25,70 +25,82 @@ headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
 }
 
-# Payload with the request text to be sent for content extraction
-payload = {
-    "message": "tell me more about AI automation",  # Change the message here
-    "stream": True
-}
+# List of messages (request texts) that the user wants to process
+messages = [
+    "tell me more about AI automation",
+    "what is decentralized AI?",
+    "how can AI benefit in business?",
+    # Add more messages as needed
+]
 
-# Start the timer for the stream request
-start_time = time.time()
+# Loop through each message
+for msg in messages:
+    print(f"\nProcessing message: {msg}")
 
-# Make the POST request to the stream URL
-response = requests.post(stream_url, headers=headers, json=payload, stream=True)
+    # Payload with the current request text
+    payload = {
+        "message": msg,
+        "stream": True
+    }
 
-# Initialize an empty string to store the extracted content
-extracted_content = ""
+    # Start the timer for the stream request
+    start_time = time.time()
 
-# Extracting content from the response stream
-for line in response.iter_lines():
-    if line:
-        try:
-            # Decode the line to a string and load it as JSON
-            decoded_line = line.decode('utf-8')
-            if decoded_line.startswith("data: "):
-                json_data = json.loads(decoded_line[6:])  # Removing the "data: " prefix
-                content = json_data["choices"][0]["delta"].get("content", "")
-                if content:  # Check if content is not None or empty
-                    extracted_content += content
-        except json.JSONDecodeError:
-            print("Error decoding line:", line)
+    # Make the POST request to the stream URL
+    response = requests.post(stream_url, headers=headers, json=payload, stream=True)
 
-# End the timer for the stream request
-end_time = time.time()
+    # Initialize an empty string to store the extracted content
+    extracted_content = ""
 
-# Calculate the time taken to receive the response
-elapsed_time = end_time - start_time
-print(f"Time taken to receive all responses: {elapsed_time:.2f} seconds")
+    # Extracting content from the response stream
+    for line in response.iter_lines():
+        if line:
+            try:
+                # Decode the line to a string and load it as JSON
+                decoded_line = line.decode('utf-8')
+                if decoded_line.startswith("data: "):
+                    json_data = json.loads(decoded_line[6:])  # Removing the "data: " prefix
+                    content = json_data["choices"][0]["delta"].get("content", "")
+                    if content:  # Check if content is not None or empty
+                        extracted_content += content
+            except json.JSONDecodeError:
+                print("Error decoding line:", line)
 
-# Print the full content as a paragraph
-print("\nFull content extracted:")
-print(extracted_content)
+    # End the timer for the stream request
+    end_time = time.time()
 
-# Now prepare the payload for the report_usage API
-wallet_address = "0x835d262d3a5fe2df98962659ec6b22d7d55ceae8"
-agent_id = "deployment_R89FtdnXa7jWWHyr97WQ9LKG"
-ttft = elapsed_time  # Time to first byte (using stream elapsed time)
-total_time = elapsed_time  # For simplicity, we use the same elapsed time as total time
-request_text = payload["message"]
-response_text = extracted_content
+    # Calculate the time taken to receive the response
+    elapsed_time = end_time - start_time
+    print(f"Time taken to receive all responses: {elapsed_time:.2f} seconds")
 
-# Payload for reporting the usage
-report_data = {
-    "wallet_address": wallet_address,
-    "agent_id": agent_id,
-    "request_text": request_text,
-    "response_text": response_text,
-    "ttft": ttft,
-    "total_time": total_time,
-    "request_metadata": {}
-}
+    # Print the full content as a paragraph
+    print("\nFull content extracted:")
+    print(extracted_content)
 
-# Send the POST request to report_usage API
-report_response = requests.post(report_url, headers=headers, json=report_data)
+    # Prepare the payload for the report_usage API
+    wallet_address = "0x835d262d3a5fe2df98962659ec6b22d7d55ceae8"
+    agent_id = "deployment_R89FtdnXa7jWWHyr97WQ9LKG"
+    ttft = elapsed_time  # Time to first byte (using stream elapsed time)
+    total_time = elapsed_time  # For simplicity, we use the same elapsed time as total time
+    request_text = msg
+    response_text = extracted_content
 
-# Check if the request was successful
-if report_response.status_code == 200:
-    print("Request to report_usage API was successful.")
-else:
-    print(f"Failed to report usage with status code: {report_response.status_code}")
+    # Payload for reporting the usage
+    report_data = {
+        "wallet_address": wallet_address,
+        "agent_id": agent_id,
+        "request_text": request_text,
+        "response_text": response_text,
+        "ttft": ttft,
+        "total_time": total_time,
+        "request_metadata": {}
+    }
+
+    # Send the POST request to report_usage API
+    report_response = requests.post(report_url, headers=headers, json=report_data)
+
+    # Check if the request was successful
+    if report_response.status_code == 200:
+        print("Request to report_usage API was successful.")
+    else:
+        print(f"Failed to report usage with status code: {report_response.status_code}")
