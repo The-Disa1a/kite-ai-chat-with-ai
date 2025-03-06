@@ -1,36 +1,27 @@
 name: Chat With Crypto Buddy
 
-# This defines the event that will trigger the action. It can be:
-# 1. On push to a specific branch (like 'main')
-# 2. On manual trigger (using `workflow_dispatch`)
+# Trigger only on manual trigger from the GitHub UI
 on:
-  push:
-    branches:
-      - main  # Trigger the action when pushing to the 'main' branch. You can change the branch as needed.
-  workflow_dispatch:  # Allows you to manually trigger this workflow from GitHub UI.
+  workflow_dispatch:
 
 jobs:
   run-python-script:
-    runs-on: ubuntu-latest  # You can select another environment if needed (e.g., `windows-latest` or `macos-latest`)
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9  # You can use another version (like 3.8, 3.10, etc.)
+          python-version: 3.9
 
-      # Step 3: Install dependencies (if you have any in requirements.txt)
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests
 
-      # Step 4: Run the Python script
       - name: Run CryptoBuddy.py
         run: |
-          python CryptoBuddy.py  # This will run your Python script 'professor.py'
+          python CryptoBuddy.py
