@@ -27,9 +27,16 @@ headers = {
 
 # List of messages (request texts) that the user wants to process
 messages = [
-    "Price of bitcoin",
-    "Price of eth",
-    "Price of shibainu",
+    "Give me the latest price and trends for the top 10 stock movers today.",
+    "What are the top 10 cryptocurrencies with the highest gains right now?",
+    "Can you show me the biggest market movers in the past 24 hours?",
+    "Which 10 stocks have seen the most price movement today?",
+    "Give me a trend analysis of the top 10 performing stocks this week.",
+    "What are the top 10 trending assets in the market at the moment?",
+    "Show me the top 10 cryptocurrencies with the most significant price fluctuations.",
+    "Which stocks are seeing the highest trading volume and price changes?",
+    "Tell me the top 10 movers in terms of percentage change today.",
+    "Can you provide the latest price trends for the top 10 market movers?",
     # Add more messages as needed
 ]
 
