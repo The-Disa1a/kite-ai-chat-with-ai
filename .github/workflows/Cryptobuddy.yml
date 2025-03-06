@@ -33,4 +33,4 @@ jobs:
       # Step 4: Run the Python script
       - name: Run CryptoBuddy.py
         run: |
-          python professor.py  # This will run your Python script 'professor.py'
+          python CryptoBuddy.py  # This will run your Python script 'professor.py'
